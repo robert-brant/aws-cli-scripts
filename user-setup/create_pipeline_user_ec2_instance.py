@@ -1,20 +1,23 @@
-import json, os
+import json, os, sys
+from create_role import createRole
 
 #### THIS SCRIPT CREATES AN EC2 INSTANCE FOR AN IAM USER THAT ALLOWS THEM TO RUN ALL NECESSARY FUNCTIONS FOR MANAGING AN AWS BUILD PIPELINE ####
 
 #The user-ec2-config.json is manually created/edited with account and vpc details.
 configFile = 'user-ec2-config.json'
 
+if !path.is_file(configFile):
+    sys.exit("Config file not found. Exiting.")
+
 ## LOAD CONFIG FILE ##
 f = open(configFile)
 configData = json.load(f)
 
 ### CREATE INSTANCE PROFILE, ROLE AND POLICIES ###
-print("Creating script user role with command:")
-roleCommand = "aws iam create-role --role-name script-{}-role --assume-role-policy-document file://aws_service_trust_policy.json".format(configData['iam-user'])
-print(roleCommand)
-os.system(roleCommand)
-print("Role created.")
+
+roleFile = "script-{}-role.json".format(configData['iam-user'])
+createRole(roleFile, configData['iam-user'])
+              
 policyCommand = "aws iam create-policy --policy-name ecr-codebuild-all-resources --policy-document file://policies/ecr_codebuild_all_resources.json"
 print("Creating policy with command:")
 print(policyCommand)
