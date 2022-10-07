@@ -6,3 +6,5 @@ aws iam create-policy --policy-name ec2-script-admin --policy-document file://po
 aws iam create-policy --policy-name iam-script-admin --policy-document file://policies/iam_admin.json
 aws iam attach-role-policy --policy-arn arn:aws:iam::$AccountID:policy/ec2-scripts-admin
 aws iam attach-role-policy --policy-arn arn:aws:iam::$AccountID:policy/iam-scripts-admin
+aws iam create-instance-profile --instance-profile-name script-admin-profile
+aws iam add-role-to-instance-profile --instance-profile-name script-admin-profile --role-name script-admin-role
