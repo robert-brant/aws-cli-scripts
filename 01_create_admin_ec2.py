@@ -8,6 +8,10 @@ f = open(configFile)
 configData = json.load(f)
 f2 = open(securityGroupFile)
 securityData = json.load(f2)
+#The .pem file created here is used to ssh into the admin ec2 instance with the command:
+# ssh -i script-admin-key-pair.pem ec2-user@<PublicDnsName>
+# PublicDnsName should be in the admin-instance-details.json or can be found using the instance id found in the admin-instance-details.json with the following query:
+# aws ec2 describe-instances --instance-ids <instance id> --query 'Reservations[].Instances[].PublicDnsName'
 os.system('aws ec2 create-key-pair --key-name script-admin-key-pair > script-admin-key-pair.pem')
 buildCommand = "aws ec2 run-instances --image-id {} --count 1 --instance-type t2.micro --key-name script-admin-key-pair --security-group-ids {} --tag-specifications 'ResourceType=instance,Tags=[{{Key=Name,Value=script-admin}}]' > admin-instance-details.json".format(configData['ami-id'],securityData['GroupId'])
 os.system(buildCommand)
