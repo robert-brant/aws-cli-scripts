@@ -2,5 +2,7 @@
         "account-id":682591199398,
         "ami-id":"ami-026b57f3c383c2eec",
         "instance-type":"t2-micro"
-        "iam-user":"robertb"
+        "iam-user":"robertb",
+        "vpc-id":"vpc-a814cad0",
+        "ip-address":"3.209.203.161"
 }
