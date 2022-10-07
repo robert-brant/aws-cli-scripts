@@ -9,6 +9,34 @@ configFile = 'user-ec2-config.json'
 f = open(configFile)
 configData = json.load(f)
 
+### CREATE INSTANCE PROFILE, ROLE AND POLICIES ###
+print("Creating script user role with command:")
+roleCommand = "aws iam create-role --role-name script-{}-role --assume-role-policy-document file://aws_service_trust_policy.json".format(configData['iam-user'])
+print(roleCommand)
+os.system(roleCommand)
+print("Role created.")
+policyCommand = "aws iam create-policy --policy-name ecr-codebuild-all-resources --policy-document file://policies/ecr_codebuild_all_resources.json"
+print("Creating policy with command:")
+print(policyCommand)
+print("Policy Created.")
+os.system(policyCommand)
+attachPolicyCommand = "aws iam attach-role-policy --role-name script-{}-role --policy-arn arn:aws:iam::{}:policy/ecr-codebuild-all-resources".format(configData['iam-user',configData['accound-id')
+print("Attaching policy to role with command:")
+print(attachPolicyCommand)
+os.system(attachPolicyCommand)
+print("Policy Attached.")
+instanceProfileCommand = "aws iam create-instance-profile --instance-profile-name script-{}-profile".format(configData['iam-user'])
+print("Creating instance profile with command:")
+print(instanceProfileCommand)
+os.system(instanceProfileCommand)
+print("Instance profile created.")
+addRoleToInstanceProfileCommand="aws iam add-role-to-instance-profile --instance-profile-name script-{}-profile --role-name script-{}-role".format(configData['iam-user'],configData['iam-user'])
+print("Attaching Role to Instance Profile with command:")
+print(addRoleToInstanceProfileCommand)
+os.system(addRoleToInstanceProfileCommand)
+print("Role attached to Instance Profile.")
+
+
 ### CREATE KEY PAIR FOR CONNECTING TO EC2 INSTANCE ###
 #The .pem file created here is used to ssh into the user ec2 instance with the command:
 # ssh -i script-user-key-pair.pem ec2-user@<PublicDnsName>
